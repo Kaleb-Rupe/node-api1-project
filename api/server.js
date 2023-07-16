@@ -20,12 +20,17 @@ server.get("/api/users", (req, res) => {
 
 server.get("/api/users/:id", (req, res) => {
   User.findById(req.params.id)
-    .then((users) => {
-      res.json(users);
+    .then((user) => {
+      if (!user) {
+        res.status(404).json({
+          message: "The user with the specified ID does not exist",
+        });
+      }
+      res.json(user);
     })
     .catch((err) => {
       res.status(500).json({
-        message: "error getting users",
+        message: "The user could not be removed",
         err: err.message,
         stack: err.stack,
       });
